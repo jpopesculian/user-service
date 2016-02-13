@@ -8,7 +8,7 @@ import (
 
 var etcd client.KeysAPI
 
-func init_etcd() {
+func InitEtcd() {
 	cfg := client.Config{
 		Endpoints:               []string{"http://127.0.0.1:2379"},
 		Transport:               client.DefaultTransport,
