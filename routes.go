@@ -13,9 +13,27 @@ type Route struct {
 
 var routes = []Route{
 	Route{
-		"Index",
+		"GetUser",
 		"GET",
-		"/",
-		Index,
+		"/user/{id}",
+		GetUser,
+	},
+	Route{
+		"Authenticate",
+		"GET",
+		"/authenticate",
+		Authenticate,
+	},
+	Route{
+		"Login",
+		"POST",
+		"/login",
+		Login,
+	},
+	Route{
+		"Register",
+		"POST",
+		"/register",
+		Register,
 	},
 }

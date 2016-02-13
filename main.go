@@ -13,7 +13,3 @@ func main() {
 	log.Println(fmt.Sprintf("Serving at localhost:%d...", config.Port))
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", config.Port), router))
 }
-
-func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Hello World!")
-}
