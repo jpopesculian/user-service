@@ -5,11 +5,6 @@ import (
 	"net/http"
 )
 
-type RegisterForm struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
 func Register(w http.ResponseWriter, r *http.Request) {
 	var form RegisterForm
 	if err := ReadJsonForm(r, &form); err != nil {
@@ -21,5 +16,10 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(user)
+	accessToken, err := CreateUserToken(user.Id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(accessToken)
 }

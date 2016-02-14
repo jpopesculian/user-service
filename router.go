@@ -4,8 +4,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func NewRouter() *mux.Router {
-	router := mux.NewRouter().StrictSlash(true)
+var router *mux.Router
+
+func InitRouter() {
+	router = mux.NewRouter().StrictSlash(true)
 	for _, route := range routes {
 		router.
 			Methods(route.Method).
@@ -13,5 +15,4 @@ func NewRouter() *mux.Router {
 			Name(route.Name).
 			Handler(Logger(route.Handler, route.Name))
 	}
-	return router
 }

@@ -7,18 +7,37 @@ import (
 )
 
 type Config struct {
-	Port uint64
+	Port           uint64
+	PrivateKeyPath string
+	PublicKeyPath  string
 }
 
-func NewConfig() Config {
-	default_port, err := strconv.ParseUint(os.Getenv("PORT"), 0, 16)
+var config Config
+
+func InitConfig() {
+	defaultPort, err := strconv.ParseUint(os.Getenv("PORT"), 0, 16)
 	if err != nil {
-		default_port = 5000
+		defaultPort = 5000
 	}
-	port := flag.Uint64("p", default_port, "Port to serve on")
+	port := flag.Uint64("p", defaultPort, "Port to serve on")
+
+	defaultPrivateKeyPath := os.Getenv("PRIVATE_KEY_PATH")
+	if len(defaultPrivateKeyPath) == 0 {
+		defaultPrivateKeyPath = "id_rsa"
+	}
+	privateKeyPath := flag.String("sk", defaultPrivateKeyPath, "Path to RSA Private Key")
+
+	defaultPublicKeyPath := os.Getenv("PUBLIC_KEY_PATH")
+	if len(defaultPublicKeyPath) == 0 {
+		defaultPublicKeyPath = "id_rsa.pub"
+	}
+	publicKeyPath := flag.String("pk", defaultPublicKeyPath, "Path to RSA Private Key")
+
 	flag.Parse()
 
-	return Config{
+	config = Config{
 		*port,
+		*privateKeyPath,
+		*publicKeyPath,
 	}
 }

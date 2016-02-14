@@ -70,6 +70,17 @@ func RepoGetUserIdByEmail(email string) (string, error) {
 	return id, nil
 }
 
+func RepoGetUserPasswordById(id string) (string, error) {
+	var password string
+	key := fmt.Sprintf("/users/services/%s/password", id)
+	meta, err := etcd.Get(context.Background(), key, nil)
+	if err != nil {
+		return id, err
+	}
+	password = meta.Node.Value
+	return password, nil
+}
+
 func RepoCreateUniqueId(tries int) (string, error) {
 	var id string
 	try := 0
