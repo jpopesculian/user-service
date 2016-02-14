@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -13,5 +12,5 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "User Not Found!", http.StatusNotFound)
 		return
 	}
-	json.NewEncoder(w).Encode(user)
+	WriteJson(w, user)
 }

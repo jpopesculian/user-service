@@ -20,7 +20,7 @@ var routes = []Route{
 	},
 	Route{
 		"Authenticate",
-		"GET",
+		"POST",
 		"/authenticate",
 		Authenticate,
 	},

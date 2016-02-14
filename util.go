@@ -20,3 +20,8 @@ func ReadJsonForm(r *http.Request, form interface{}) error {
 	}
 	return nil
 }
+
+func WriteJson(w http.ResponseWriter, object interface{}) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(object)
+}

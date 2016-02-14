@@ -9,7 +9,6 @@ import (
 type Config struct {
 	Port           uint64
 	PrivateKeyPath string
-	PublicKeyPath  string
 }
 
 var config Config
@@ -27,17 +26,10 @@ func InitConfig() {
 	}
 	privateKeyPath := flag.String("sk", defaultPrivateKeyPath, "Path to RSA Private Key")
 
-	defaultPublicKeyPath := os.Getenv("PUBLIC_KEY_PATH")
-	if len(defaultPublicKeyPath) == 0 {
-		defaultPublicKeyPath = "id_rsa.pub"
-	}
-	publicKeyPath := flag.String("pk", defaultPublicKeyPath, "Path to RSA Private Key")
-
 	flag.Parse()
 
 	config = Config{
 		*port,
 		*privateKeyPath,
-		*publicKeyPath,
 	}
 }

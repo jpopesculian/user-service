@@ -8,11 +8,11 @@ import (
 
 func GetPublicKey() (*rsa.PublicKey, error) {
 	var key *rsa.PublicKey
-	bytes, err := ioutil.ReadFile(config.PublicKeyPath)
+	privateKey, err := GetPrivateKey()
 	if err != nil {
 		return key, err
 	}
-	return jwt.ParseRSAPublicKeyFromPEM(bytes)
+	return &privateKey.PublicKey, nil
 }
 
 func GetPrivateKey() (*rsa.PrivateKey, error) {

@@ -31,13 +31,16 @@ func CreateUserToken(id string) (AccessToken, error) {
 func GetUserIdFromToken(accessToken AccessToken) (string, error) {
 	var id string
 	token, err := jwt.Parse(accessToken.Value, GetSigningKeyFromToken)
-	if err == nil && token.Valid {
+	if err != nil {
+		return id, err
+	}
+	if token.Valid {
 		claim := token.Claims["id"]
 		if id, ok := claim.(string); ok {
 			return id, nil
 		}
 	}
-	return id, fmt.Errorf("Invalid or Malformed Token!")
+	return id, fmt.Errorf("Invalid Token!")
 }
 
 func GetSigningKeyFromToken(token *jwt.Token) (interface{}, error) {
