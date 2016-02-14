@@ -5,9 +5,14 @@ import (
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {
-	var form RegisterForm
+	var form EmailPassForm
 	if err := ReadJsonForm(r, &form); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	form = TrimEmailPassForm(form)
+	if ok, err := ValidateEmailPassForm(form); err != nil || !ok {
+		http.Error(w, "Invalid Form", http.StatusInternalServerError)
 		return
 	}
 	user, err := RepoCreateUser(form.Email, form.Password)
@@ -20,5 +25,9 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	WriteJson(w, accessToken)
+	authenticatedUser := AuthenticatedUser{
+		user,
+		accessToken,
+	}
+	WriteJson(w, authenticatedUser)
 }

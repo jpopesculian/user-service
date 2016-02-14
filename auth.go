@@ -4,11 +4,6 @@ import (
 	"net/http"
 )
 
-type AuthenticatedUser struct {
-	User        User        `json:"user"`
-	AccessToken AccessToken `json:"jwt"`
-}
-
 func Authenticate(w http.ResponseWriter, r *http.Request) {
 	var accessToken AccessToken
 	if err := ReadJsonForm(r, &accessToken); err != nil {

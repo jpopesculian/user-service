@@ -10,6 +10,11 @@ type AccessToken struct {
 	Value string `json:"access_token"`
 }
 
+type AuthenticatedUser struct {
+	User        User        `json:"user"`
+	AccessToken AccessToken `json:"jwt"`
+}
+
 func CreateUserToken(id string) (AccessToken, error) {
 	var accessToken AccessToken
 	token := jwt.New(jwt.SigningMethodRS256)
