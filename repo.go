@@ -25,8 +25,7 @@ func RepoGetUserById(id string) (User, error) {
 
 func RepoCreateUser(email string, password string) (User, error) {
 	var user User
-	_, err := RepoGetUserIdByEmail(email)
-	if client.IsKeyNotFound(err) != true {
+	if ok, _, _ := RepoUserExistsByEmail(email); ok {
 		return user, errors.New("Email Already Exists!")
 	}
 	id, err := RepoCreateUniqueId(3)
@@ -68,6 +67,17 @@ func RepoGetUserIdByEmail(email string) (string, error) {
 	}
 	id = meta.Node.Value
 	return id, nil
+}
+
+func RepoUserExistsByEmail(email string) (bool, string, error) {
+	userId, err := RepoGetUserIdByEmail(email)
+	if err != nil {
+		if client.IsKeyNotFound(err) != true {
+			return false, userId, err
+		}
+		return false, userId, nil
+	}
+	return true, userId, nil
 }
 
 func RepoGetUserPasswordById(id string) (string, error) {
