@@ -3,39 +3,31 @@ package main
 import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"net/http"
 	"time"
 )
 
-type AccessToken struct {
-	Value string `json:"access_token"`
-}
+const AccessTokenHeader = "X-Authorization"
 
-type AuthenticatedUser struct {
-	User        User        `json:"user"`
-	AccessToken AccessToken `json:"jwt"`
-}
-
-func CreateUserToken(id string) (AccessToken, error) {
-	var accessToken AccessToken
+func CreateUserToken(id string) (string, error) {
 	token := jwt.New(jwt.SigningMethodRS256)
 	token.Claims["id"] = id
 	token.Claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 
 	key, err := GetPrivateKey()
 	if err != nil {
-		return accessToken, err
+		return "", err
 	}
-	tokenString, err := token.SignedString(key)
+	accessToken, err := token.SignedString(key)
 	if err != nil {
-		return accessToken, err
+		return "", err
 	}
-	accessToken = AccessToken{tokenString}
 	return accessToken, nil
 }
 
-func GetUserIdFromToken(accessToken AccessToken) (string, error) {
+func GetUserIdFromToken(accessToken string) (string, error) {
 	var id string
-	token, err := jwt.Parse(accessToken.Value, GetSigningKeyFromToken)
+	token, err := jwt.Parse(accessToken, GetSigningKeyFromToken)
 	if err != nil {
 		return id, err
 	}
@@ -57,4 +49,12 @@ func GetSigningKeyFromToken(token *jwt.Token) (interface{}, error) {
 		return key, err
 	}
 	return key, nil
+}
+
+func GetAccessTokenFromRequest(r *http.Request) string {
+	return r.Header.Get(AccessTokenHeader)
+}
+
+func WriteAccessTokenToResponse(w http.ResponseWriter, accessToken string) {
+	w.Header().Set(AccessTokenHeader, accessToken)
 }

@@ -25,9 +25,6 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	authenticatedUser := AuthenticatedUser{
-		user,
-		accessToken,
-	}
-	WriteJson(w, authenticatedUser)
+	WriteAccessTokenToResponse(w, accessToken)
+	WriteJson(w, user)
 }

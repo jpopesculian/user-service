@@ -13,16 +13,16 @@ type Route struct {
 
 var routes = []Route{
 	Route{
+		"Authenticate",
+		"GET",
+		"/authenticated",
+		Authenticate,
+	},
+	Route{
 		"GetUser",
 		"GET",
 		"/{id}",
 		GetUser,
-	},
-	Route{
-		"Authenticate",
-		"POST",
-		"/authenticate",
-		Authenticate,
 	},
 	Route{
 		"Login",

@@ -5,11 +5,7 @@ import (
 )
 
 func Authenticate(w http.ResponseWriter, r *http.Request) {
-	var accessToken AccessToken
-	if err := ReadJsonForm(r, &accessToken); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	accessToken := GetAccessTokenFromRequest(r)
 	id, err := GetUserIdFromToken(accessToken)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
@@ -24,9 +20,6 @@ func Authenticate(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		newAccessToken = accessToken
 	}
-	authenticatedUser := AuthenticatedUser{
-		user,
-		newAccessToken,
-	}
-	WriteJson(w, authenticatedUser)
+	WriteAccessTokenToResponse(w, newAccessToken)
+	WriteJson(w, user)
 }
